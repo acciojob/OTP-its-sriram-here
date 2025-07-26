@@ -1,35 +1,34 @@
-  const inputs = document.querySelectorAll(".code");
-    inputs[0].focus();
+const inputs = document.querySelectorAll('.code');
 
-    inputs.forEach((input, idx) => {
-      input.addEventListener('input', (e) => {
-        const value = e.target.value;
-        if (value.match(/^[0-9]$/)) {
-          input.value = value;
-          if (idx < inputs.length - 1) inputs[idx + 1].focus();
-        } else {
-          input.value = '';
-        }
-      });
+inputs[0].focus();
 
-      input.addEventListener('keydown', (e) => {
-        if (e.key === "Backspace") {
-          if (input.value === '') {
-            if (idx > 0) {
-              inputs[idx - 1].focus();
-              inputs[idx - 1].value = '';
-              e.preventDefault();
-            }
-          } else {
-            input.value = '';
-            e.preventDefault();
-          }
-        } else if (e.key >= '0' && e.key <= '9') {
-          // allow
-        } else if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
-          // allow tab and arrows
-        } else {
-          e.preventDefault();
+inputs.forEach((input, index) => {
+  input.addEventListener('keydown', (e) => {
+    if (e.key >= 0 && e.key <= 9) {
+      input.value = '';
+      setTimeout(() => {
+        if (index < inputs.length - 1) {
+          inputs[index + 1].focus();
         }
-      });
-    });
+      }, 10);
+    } else if (e.key === 'Backspace') {
+      if (input.value === '') {
+        if (index > 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].value = '';
+        }
+      } else {
+        input.value = '';
+      }
+    } else {
+      e.preventDefault(); // only allow digits
+    }
+  });
+
+  input.addEventListener('input', () => {
+    const value = input.value;
+    if (value && index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
+  });
+});
